@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Time Update</title>
+</head>
+<body>
+    <div id="time"></div>
+
+    <script>
+        function updateTime() {
+            const date = new Date();
+            document.getElementById("time").innerHTML = date.toLocaleTimeString('en-US');
+        }
+
+        // Call updateTime every 1000 milliseconds (1 second)
+        setInterval(updateTime, 1000);
+
+        // Initial call to display the time immediately when the page loads
+        updateTime();
+    </script>
+</body>
+</html>
