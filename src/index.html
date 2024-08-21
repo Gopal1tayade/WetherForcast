@@ -30,8 +30,8 @@
       <article class="text-center mt-7 bg-gray-300 rounded-lg ml-8 mr-8 h-60 md:h-64 ">
          <p class="text-2xl mt-4 font-bold md:text-4xl">Enter the city Name</p>
           <form class="flex flex-col" >
-             <input type="search" class="m-4 rounded-lg p-2" placeholder="Eg, Nagpur , Pune , Banglore" name="search" id="search">
-             <button type="submit" class=" bg-violet-600 font-bold text-white text-xl w-1/2 text-center rounded-md ml-20 p-2 md:ml-40 ">Search</button>
+             <input type="search" id="cityname" class="m-4 rounded-lg p-2" placeholder="Eg, Nagpur , Pune , Banglore" name="search" id="search">
+             <button type="submit" onclick="getcityName()"  class=" bg-violet-600 font-bold text-white text-xl w-1/2 text-center rounded-md ml-20 p-2 md:ml-40 ">Search</button>
           </form>
           <p>--------------- OR ---------------</p>
             <button class="bg-stone-400 p-1 rounded-sm font-semibold mt-1 md:p-2">Use My Current Location</button>   
@@ -41,14 +41,14 @@
             <!-- Display information -->
             <article class="m-2 rounded-md mt-8 flex justify-between p-1 bg-sky-500 md:p-5 ">
                <section class="ml-1 leading-8" >
-                  <h2 class="text-xl font-bold md:text-2xl">London(2024-08-20)</h2>
-                  <p class="font-semibold md:text-lg">Tempreature:7.06 <sup>0</sup>C</p>
-                  <p class="font-semibold md:text-lg">Wind:2.83 m/s</p>
-                  <p class="font-semibold md:text-lg">Humadity:88%</p>
+                  <h2 id="location" class="text-base  font-bold md:text-2xl">London(2024-08-20)</h2>
+                  <p id="temprature" class="font-semibold md:text-lg">Tempreature:7.06 <sup>0</sup>C</p>
+                  <p id="wind" class="font-semibold md:text-lg">Wind:2.83 m/s</p>
+                  <p id="humadity" class="font-semibold md:text-lg">Humadity:88%</p>
                </section>
                <section>
-                  <img src="../public/images/sun-159378_640.webp"  width="100px" alt="wether image">
-                  <p class="mt-2 ml-3">Condition</p>
+                  <img id="image"  src="../public/images/sun-159378_640.webp"  width="100px" alt="wether image">
+                  <p id="envcondition" class="-mt-5 ml-3">Condition</p>
                </section>
                
               </article>
