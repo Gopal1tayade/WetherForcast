@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const city =  data.address.city || data.address.town || data.address.village || 'Unknown location';
     sessionStorage.setItem('cityName', city);
     alert(`Your current city is: ${city}`);
+    window.location.reload();
   }).catch(() => alert('Failed to retrieve city name. Please try again.'));
 
  }
@@ -38,7 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
   alert('Unable to retrieve your location.');
 }
 
-const storedCity = sessionStorage.getItem('cityName');
+let storedCity = sessionStorage.getItem('cityName');
+storedCity = (storedCity === null || storedCity.trim() === '') ? 'London' : storedCity;
 console.log(`${storedCity}`);
 
 
