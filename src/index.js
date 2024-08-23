@@ -1,5 +1,5 @@
-// require('dotenv').config();
 
+document.addEventListener('DOMContentLoaded', () => {
 
   //Time
   function updateTime(){
@@ -9,13 +9,42 @@
   }
   setInterval(updateTime, 1000);
  //  updateTime();
+ // getting the current position
 
-  
-  
+ document.getElementById('currentlocation').addEventListener('click',function (e){
+      e.preventDefault();
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(success ,error);
+      }else{
+        alert('Geolocation is not supported by your browser.');
+      }
+ });
  
- 
+ function success(position){
+  const latitude = position.coords.latitude;
+  const longitude = position.coords.longitude;
+  
+  const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+  
+  fetch(apiURL).then(response => response.json()).then(data =>{
+    const city =  data.address.city || data.address.town || data.address.village || 'Unknown location';
+    sessionStorage.setItem('cityName', city);
+    alert(`Your current city is: ${city}`);
+  }).catch(() => alert('Failed to retrieve city name. Please try again.'));
+
+ }
+
+ function error() {
+  alert('Unable to retrieve your location.');
+}
+
+const storedCity = sessionStorage.getItem('cityName');
+console.log(`${storedCity}`);
+
+
 // api data
- const url ="http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=London&days=5";
+ const url =`http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+
 
 async function getData(url) {
   try {
@@ -62,3 +91,10 @@ getData(url);
 
 
 
+
+
+
+
+  
+})
+  
