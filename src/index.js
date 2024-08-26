@@ -11,9 +11,38 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updateTime, 1000);
   //  updateTime();
 
+ 
+  const CityNames = JSON.parse(localStorage.getItem("CityName")) || [];
+  console.log(CityNames); 
+  const dropdown =document.getElementById("citys");
+
+  document.getElementById('cityname').addEventListener('focus',()=>{
+       const filteredCities = CityNames.filter(city => city.toLowerCase());
+       dropdown.innerHTML = '';
+        filteredCities.forEach(city =>{
+          const listItem = document.createElement('option');
+          listItem.value = city;
+          dropdown.appendChild(listItem);
+        })
+    
+  });
+
+  document.getElementById('cityname').addEventListener('input',()=>{
+    const inputValue = document.getElementById('cityname').value.toLowerCase();
+    dropdown.innerHTML = '';
+    if(inputValue){
+      
+   const filteredCities = CityNames.filter(city => city.toLowerCase().includes(inputValue));
+        filteredCities.forEach(city =>{
+          const listItem = document.createElement('option');
+          listItem.value = city;
+          dropdown.appendChild(listItem);
+        })
+    }
+  });
   
 
-  let CityName = JSON.parse(localStorage.getItem("citynames")) || [];
+  
 
 //getting the wether through cityname
 
@@ -22,8 +51,11 @@ document.getElementById("btn").addEventListener('click',function (e){
   alert("Data will loaded...........!");
   var city = document.getElementById("cityname").value;
    sessionStorage.setItem('clickcityName' ,city);
-   CityName.push(city);
-        localStorage.setItem("CityName", JSON.stringify(CityName));
+   if(!CityNames.includes(city)){
+    CityNames.push(city);
+   }
+  
+        localStorage.setItem("CityName", JSON.stringify(CityNames));
        document.getElementById("cityform").reset();
 
         var storedCity = sessionStorage.getItem("clickcityName");
@@ -139,8 +171,32 @@ document.getElementById("btn").addEventListener('click',function (e){
         fivedyasforcast.appendChild(forcastSection);
       });
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data: something enter wrong", error);
+      alert("the name of the city is not correct.........!");
     }
   }
   getData(url);
+
+// after the session is complete , to remove the data from the localstorage
+  function checkServerStatus() {
+    
+    fetch('http://127.0.0.1:5500/src/')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Server is off');
+            }
+        
+        })
+        .catch(error => {
+            console.error('Server is off: please resatrt the server', error);
+          
+            localStorage.clear();
+        });
+}
+
+
+setInterval(checkServerStatus, 30000);
+
+
+checkServerStatus();
 });
