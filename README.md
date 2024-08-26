@@ -8,3 +8,8 @@
  # once all done open the clone project withe live server or copy the project url and past it on the browser             
 
 ***** then you see working of the application *****
+
+
+
+
+# git url for this application -----> " https://github.com/Gopal1tayade/WetherForcast "
