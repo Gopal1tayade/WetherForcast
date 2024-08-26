@@ -40,31 +40,40 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
   });
+    
+// create a global function to show the data
+
+function handleClick(e) {
+  e.preventDefault();
+  alert("Data will be loaded...........!");
   
+  var city = document.getElementById("cityname").value;
+  sessionStorage.setItem('clickcityName', city);
+
+  if (!CityNames.includes(city)) {
+    CityNames.push(city);
+  }
+
+  localStorage.setItem("CityName", JSON.stringify(CityNames));
+  document.getElementById("cityform").reset();
+
+  var storedCity = sessionStorage.getItem("clickcityName");
+  storedCity = storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
+
+  console.log(`${storedCity}`);
+  
+  const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+  getData(url);
+}
+  
+
+
 
   
 
 //getting the wether through cityname
 
-document.getElementById("btn").addEventListener('click',function (e){
-  e.preventDefault();
-  alert("Data will loaded...........!");
-  var city = document.getElementById("cityname").value;
-   sessionStorage.setItem('clickcityName' ,city);
-   if(!CityNames.includes(city)){
-    CityNames.push(city);
-   }
-  
-        localStorage.setItem("CityName", JSON.stringify(CityNames));
-       document.getElementById("cityform").reset();
-
-        var storedCity = sessionStorage.getItem("clickcityName");
-        storedCity =
-          storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
-        console.log(`${storedCity}`);
-        const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
-        getData(url);
-})
+document.getElementById("btn").addEventListener('click',handleClick)
 
 
 
@@ -200,3 +209,26 @@ setInterval(checkServerStatus, 30000);
 
 checkServerStatus();
 });
+
+
+
+
+//function (e){
+//   e.preventDefault();
+//   alert("Data will loaded...........!");
+//   var city = document.getElementById("cityname").value;
+//    sessionStorage.setItem('clickcityName' ,city);
+//    if(!CityNames.includes(city)){
+//     CityNames.push(city);
+//    }
+  
+//         localStorage.setItem("CityName", JSON.stringify(CityNames));
+//        document.getElementById("cityform").reset();
+
+//         var storedCity = sessionStorage.getItem("clickcityName");
+//         storedCity =
+//           storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
+//         console.log(`${storedCity}`);
+//         const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+//         getData(url);
+// }
