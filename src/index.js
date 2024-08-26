@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   //Time
   function updateTime() {
     const date = new Date();
@@ -11,73 +10,68 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(updateTime, 1000);
   //  updateTime();
 
- 
   const CityNames = JSON.parse(localStorage.getItem("CityName")) || [];
-  console.log(CityNames); 
-  const dropdown =document.getElementById("citys");
+  console.log(CityNames);
+  const dropdown = document.getElementById("citys");
 
-  document.getElementById('cityname').addEventListener('focus',()=>{
-       const filteredCities = CityNames.filter(city => city.toLowerCase());
-       dropdown.innerHTML = '';
-        filteredCities.forEach(city =>{
-          const listItem = document.createElement('option');
-          listItem.value = city;
-          dropdown.appendChild(listItem);
-        })
-    
+  document.getElementById("cityname").addEventListener("focus", () => {
+    const filteredCities = CityNames.filter((city) => city.toLowerCase());
+    dropdown.innerHTML = "";
+    filteredCities.forEach((city) => {
+      const listItem = document.createElement("option");
+      listItem.value = city;
+      dropdown.appendChild(listItem);
+    });
   });
 
-  document.getElementById('cityname').addEventListener('input',()=>{
-    const inputValue = document.getElementById('cityname').value.toLowerCase();
-    dropdown.innerHTML = '';
-    if(inputValue){
-      
-   const filteredCities = CityNames.filter(city => city.toLowerCase().includes(inputValue));
-        filteredCities.forEach(city =>{
-          const listItem = document.createElement('option');
-          listItem.value = city;
-          dropdown.appendChild(listItem);
-        })
+  document.getElementById("cityname").addEventListener("input", () => {
+    const inputValue = document.getElementById("cityname").value.toLowerCase();
+    dropdown.innerHTML = "";
+    if (inputValue) {
+      const filteredCities = CityNames.filter((city) =>
+        city.toLowerCase().includes(inputValue)
+      );
+      filteredCities.forEach((city) => {
+        const listItem = document.createElement("option");
+        listItem.value = city;
+        dropdown.appendChild(listItem);
+      });
     }
   });
-    
-// create a global function to show the data
 
-function handleClick(e) {
-  e.preventDefault();
-  alert("Data will be loaded...........!");
-  
-  var city = document.getElementById("cityname").value;
-  sessionStorage.setItem('clickcityName', city);
+  // create a global function to show the data through the city name
 
-  if (!CityNames.includes(city)) {
-    CityNames.push(city);
+  function handleClick(e) {
+    e.preventDefault();
+    alert("Data will be loaded...........!");
+
+    var city = document.getElementById("cityname").value;
+    if (!city) {
+      alert("enter the city Name.....!");
+      return;
+    }
+    sessionStorage.setItem("clickcityName", city);
+
+    if (!CityNames.includes(city)) {
+      CityNames.push(city);
+    }
+
+    localStorage.setItem("CityName", JSON.stringify(CityNames));
+    document.getElementById("cityform").reset();
+
+    var storedCity = sessionStorage.getItem("clickcityName");
+    storedCity =
+      storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
+
+    console.log(`${storedCity}`);
+
+    const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+    getData(url);
   }
 
-  localStorage.setItem("CityName", JSON.stringify(CityNames));
-  document.getElementById("cityform").reset();
+  //getting the wether through cityname
 
-  var storedCity = sessionStorage.getItem("clickcityName");
-  storedCity = storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
-
-  console.log(`${storedCity}`);
-  
-  const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
-  getData(url);
-}
-  
-
-
-
-  
-
-//getting the wether through cityname
-
-document.getElementById("btn").addEventListener('click',handleClick)
-
-
-
-
+  document.getElementById("btn").addEventListener("click", handleClick);
 
   // getting the current position
 
@@ -95,9 +89,9 @@ document.getElementById("btn").addEventListener('click',handleClick)
       function success(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-    
+
         const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-    
+
         fetch(apiURL)
           .then((response) => response.json())
           .then((data) => {
@@ -106,31 +100,24 @@ document.getElementById("btn").addEventListener('click',handleClick)
               data.address.town ||
               data.address.village ||
               "Unknown location";
-            sessionStorage.setItem("cityName", city);
+            sessionStorage.setItem("cityName", city); // storing the city name in the session storage
             alert(`Your current city is: ${city}`);
             window.location.reload();
           })
-          .catch(() => alert("Failed to retrieve city name. Please try again."));
+          .catch(() =>
+            alert("Failed to retrieve city name. Please try again.")
+          );
       }
-    
+
       function error() {
         alert("Unable to retrieve your location.");
       }
-
     });
-
-  
-    
 
   var storedCity = sessionStorage.getItem("cityName");
   storedCity =
     storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
   console.log(`${storedCity}`);
-
- 
-
-
-
 
   // api data
   const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
@@ -140,7 +127,6 @@ document.getElementById("btn").addEventListener('click',handleClick)
       const response = await fetch(url);
       const resultdata = await response.json();
       console.log(resultdata);
-
 
       // current wether information
       document.getElementById(
@@ -162,16 +148,13 @@ document.getElementById("btn").addEventListener('click',handleClick)
         "image"
       ).src = `//cdn.weatherapi.com/weather/64x64/day/116.png`;
 
-
-
       // wether forcast for nest 5 days
 
       const fivedyasforcast = document.getElementById("fivedays");
       fivedyasforcast.innerHTML = "";
       resultdata.forecast.forecastday.forEach((days) => {
         const forcastSection = document.createElement("section");
-        forcastSection.className =
-          "bg-lime-400 text-center mt-10 ml-14 mr-14 mb-8 shadow-inner md:shadow-2xl shadow-lime-400/50 rounded-lg leading-8 p-2 md:ml-14 md:p-10 md:leading-10 lg:m-4 lg:p-2 lg:leading-4";
+        forcastSection.className ="bg-lime-400 hover:scale-100 text-center mt-10 ml-14 mr-14 mb-8 md:m-12 shadow-inner md:shadow-2xl shadow-lime-400/50 rounded-lg leading-8 p-2  md:p-10 md:leading-10 lg:m-4 lg:p-2 lg:leading-4";
         forcastSection.innerHTML = ` <p class="text-xl font-semibold md:text-2xl md:mt-2">Date(${days.date})</p>
                         <img src=${days.day.condition.icon} class="ml-20 mb-2 md:ml-12" width="80px" alt="wether image">
                         <p class="font-semibold md:text-lg">Temprature: ${days.day.avgtemp_c} <sup>0</sup>C</p>
@@ -186,49 +169,20 @@ document.getElementById("btn").addEventListener('click',handleClick)
   }
   getData(url);
 
-// after the session is complete , to remove the data from the localstorage
+  // after the session is complete , to remove the data from the localstorage
   function checkServerStatus() {
-    
-    fetch('http://127.0.0.1:5500/src/')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Server is off');
-            }
-        
-        })
-        .catch(error => {
-            console.error('Server is off: please resatrt the server', error);
-          
-            localStorage.clear();
-        });
-}
+    fetch("http://127.0.0.1:5500/src/")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Server is off");
+        }
+      })
+      .catch((error) => {
+        console.error("Server is off: please resatrt the server", error);
 
-
-setInterval(checkServerStatus, 30000);
-
-
-checkServerStatus();
+        localStorage.clear();
+      });
+  }
+  setInterval(checkServerStatus, 30000);
+  checkServerStatus();
 });
-
-
-
-
-//function (e){
-//   e.preventDefault();
-//   alert("Data will loaded...........!");
-//   var city = document.getElementById("cityname").value;
-//    sessionStorage.setItem('clickcityName' ,city);
-//    if(!CityNames.includes(city)){
-//     CityNames.push(city);
-//    }
-  
-//         localStorage.setItem("CityName", JSON.stringify(CityNames));
-//        document.getElementById("cityform").reset();
-
-//         var storedCity = sessionStorage.getItem("clickcityName");
-//         storedCity =
-//           storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
-//         console.log(`${storedCity}`);
-//         const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
-//         getData(url);
-// }

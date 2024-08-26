@@ -13,7 +13,7 @@
    <!-- heade -->
 
    <header class="flex justify-around items-center bg-gradient-to-r from-purple-500 to-pink-500  h-16">
-         <h1 class="text-2xl font-semibold  -ml-4 md:text-4xl md:ml-0">Wether Forcast</h1>
+         <h1 class="text-2xl font-semibold  -ml-4 md:text-4xl md:ml-0">Weather Forcast</h1>
          <section class="font-semibold md:flex gap-8 items-center" >
             <p id="date" class="md:text-xl">Date</p>
             <p id="time" class="md:text-xl">Time</p>
@@ -26,21 +26,26 @@
    <main class="lg:grid lg:grid-cols-2">
 
 
-      <!-- search with city or current location -->
-      <article class="text-center mt-7 bg-gray-300 rounded-lg ml-8 mr-8 h-60 md:h-64 ">
-         <p class="text-2xl mt-4 font-bold md:text-4xl">Enter the city Name</p>
-          <form id="cityform" class="flex flex-col">
-             <input type="search" id="cityname" class="m-4 rounded-lg p-2" placeholder="Eg, Nagpur , Pune , Banglore" name="search" list="citys">
-             <datalist id="citys">
-              
-             </datalist>
-             <!-- <ul id="dropdown" class="absolute mt-2 mb-4 z-10 bg-red-700 border border-gray-300 rounded-lg hidden w-full max-h-60 overflow-y-auto"></ul> -->
-             <button type="submit" id="btn"  class=" bg-violet-600 fixed font-bold  text-white text-xl w-1/2 text-center rounded-md ml-20 p-2 md:ml-40 ">Search</button>
-             
-          </form>
-          <p>--------------- OR ---------------</p>
-            <button id="currentlocation" class="bg-stone-400 p-1 rounded-sm font-semibold mt-1 md:p-2">Use My Current Location</button>   
-        </article>
+         <!-- search with city or current location -->
+         <article class="text-center mt-7 bg-gray-300 rounded-lg ml-8 mr-8 h-60 md:h-64 ">
+            <p class="text-2xl mt-4 font-bold md:text-4xl">Enter the city Name</p>
+             <form id="cityform" class="flex flex-col">
+                <input type="search" id="cityname" class="m-4 rounded-lg p-2" placeholder="Eg, Nagpur , Pune , Banglore" name="search" list="citys">
+                <datalist id="citys">
+                 
+                </datalist>
+                <!-- <ul id="dropdown" class="absolute mt-2 mb-4 z-10 bg-red-700 border border-gray-300 rounded-lg hidden w-full max-h-60 overflow-y-auto"></ul> -->
+                <button type="submit" id="btn"  class=" bg-violet-600  hover:bg-violet-900  font-bold hover:scale-105  text-white text-xl w-1/2 text-center rounded-md ml-20 p-2 md:ml-40 ">Search</button>
+                
+             </form>
+             <p>--------------- OR ---------------</p>
+               <button id="currentlocation" class="bg-stone-400 hover:bg-stone-800 hover:text-white p-1 rounded-sm font-semibold mt-1 md:p-2">Use My Current Location</button>   
+           </article>
+   
+
+      
+      
+
          <article>
                 
             <!-- Display information -->
@@ -62,16 +67,16 @@
               <!-- next five day -->
                <article>
                   <h1 class="text-2xl font-bold mt-5 ml-3 md:text-4xl">Next 5 Days Forcast</h1>
-                  <article id="fivedays" class="flex flex-col md:flex-row md:flex-wrap ">
+                  <article id="fivedays" class="flex flex-col md:flex-row  md:flex-wrap  lg:flex-row lg:flex-wrap ">
 
-                     <section class="bg-lime-400 text-center mt-10 ml-14 mr-14 mb-8 shadow-inner md:shadow-2xl shadow-lime-400/50 rounded-lg leading-8 p-2 md:ml-14 md:p-10 md:leading-10 lg:m-4 lg:p-2 lg:leading-4">
+                     <section class="bg-lime-400 hover:scale-100 text-center mt-10 ml-14 mr-14 mb-8 shadow-inner md:shadow-2xl shadow-lime-400/50 rounded-lg leading-8 p-2 md:ml-14 md:p-10 md:leading-10 lg:m-4 lg:p-2 lg:leading-4">
                         <p class="text-xl font-semibold md:text-2xl md:mt-2">Date(2024-08-21)</p>
                         <img src="../public/images/sun-159378_640.webp" class="ml-20 mb-2 md:ml-12" width="80px" alt="wether image">
                         <p class="font-semibold md:text-lg">Tempreature: 7.06 <sup>0</sup>C</p>
                         <p class="font-semibold md:text-lg">Wind: 2.83 m/s</p>
                         <p class="font-semibold md:text-lg">Humadity: 88%</p>
                      </section>
-    
+
                   </article>
                  
                </article>
@@ -81,7 +86,11 @@
         
 
    </main>
+
+   
+  
    
    <script type="module" src="index.js"></script>
+   
 </body>
 </html>
