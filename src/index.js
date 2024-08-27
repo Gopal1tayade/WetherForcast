@@ -197,6 +197,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Map implementation
 
   var map = L.map('map').setView([20.5937, 78.9629], 4);
+
+  const lattitud = localStorage.getItem('lattitud');
+  const longituted = localStorage.getItem('longituted');
+
+  var marker = L.marker([lattitud, longituted]).addTo(map);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
    
@@ -215,6 +220,32 @@ var baseMaps = {
 };
 
 L.control.layers(baseMaps).addTo(map);
+function onMapClick(e) {
+  console.log(e.latlng); 
+  var marker = L.marker([e.latlng.lat , e.latlng.lng]).addTo(map);
+  localStorage.setItem('lattitud',e.latlng.lat);
+  localStorage.setItem('longituted',e.latlng.lng);
+  const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`;
+
+  fetch(apiURL)
+  .then((response) => response.json())
+  .then((data) => {
+    const city =
+      data.address.city ||
+      data.address.town ||
+      data.address.village ||
+      "Unknown location";
+    sessionStorage.setItem("cityName", city); // storing the city name in the session storage
+    alert(`Your current city is: ${city}`);
+    window.location.reload();
+  
+  })
+  .catch(() =>
+    alert("Failed to retrieve city name. Please try again.")
+  );
+}
+
+map.on('click', onMapClick);
 
 
 
