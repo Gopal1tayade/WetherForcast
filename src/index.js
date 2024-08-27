@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let truefalse = false;
+
   //Time
   function updateTime() {
     const date = new Date();
@@ -67,6 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
     getData(url);
+  
   }
 
   //getting the wether through cityname
@@ -79,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("currentlocation")
     .addEventListener("click", function (e) {
       e.preventDefault();
+      truefalse = true;
       if (navigator.geolocation) {
         alert("getting your location......... Wait for five second.......!");
         navigator.geolocation.getCurrentPosition(success, error);
@@ -103,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
             sessionStorage.setItem("cityName", city); // storing the city name in the session storage
             alert(`Your current city is: ${city}`);
             window.location.reload();
+          
           })
           .catch(() =>
             alert("Failed to retrieve city name. Please try again.")
@@ -185,4 +190,32 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   setInterval(checkServerStatus, 30000);
   checkServerStatus();
+
+
+
+
+  // Map implementation
+
+  var map = L.map('map').setView([20.5937, 78.9629], 4);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+   
+}).addTo(map);
+
+var precipitationLayer = L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`);
+var temperatureLayer = L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`);
+var windLayer = L.tileLayer(`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`);
+
+precipitationLayer.addTo(map); // Add precipitation layer to the map
+
+var baseMaps = {
+  "Precipitation": precipitationLayer,
+  "Temperature": temperatureLayer,
+  "Wind": windLayer
+};
+
+L.control.layers(baseMaps).addTo(map);
+
+
+
 });

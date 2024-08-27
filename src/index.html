@@ -6,6 +6,15 @@
     <meta name="author" content="Gopal Tayade">
      <meta name="info" content="wether forcast applicatio build using html css and javascript that provide the wether condition such as temprature , condition and last days information">
     <link href="./output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
     <title>Document</title>
 </head>
 <body class="bg-slate-200 ">
@@ -27,21 +36,29 @@
 
 
          <!-- search with city or current location -->
-         <article class="text-center mt-7 bg-gray-300 rounded-lg ml-8 mr-8 h-60 md:h-64 ">
-            <p class="text-2xl mt-4 font-bold md:text-4xl">Enter the city Name</p>
-             <form id="cityform" class="flex flex-col">
-                <input type="search" id="cityname" class="m-4 rounded-lg p-2" placeholder="Eg, Nagpur , Pune , Banglore" name="search" list="citys">
-                <datalist id="citys">
-                 
-                </datalist>
-                <!-- <ul id="dropdown" class="absolute mt-2 mb-4 z-10 bg-red-700 border border-gray-300 rounded-lg hidden w-full max-h-60 overflow-y-auto"></ul> -->
-                <button type="submit" id="btn"  class=" bg-violet-600  hover:bg-violet-900  font-bold hover:scale-105  text-white text-xl w-1/2 text-center rounded-md ml-20 p-2 md:ml-44 lg:ml-40 ">Search</button>
-                
-             </form>
-             <p>--------------- OR ---------------</p>
-               <button id="currentlocation" class="bg-stone-400 hover:bg-stone-800 hover:text-white p-1 rounded-sm font-semibold mt-1 md:p-2">Use My Current Location</button>   
-           </article>
-   
+         
+   <article>
+      <article class="text-center mt-7 bg-gray-300 rounded-lg ml-8 mr-8 h-60 md:h-64 ">
+         <p class="text-2xl mt-4 font-bold md:text-4xl">Enter the city Name</p>
+          <form id="cityform" class="flex flex-col">
+             <input type="search" id="cityname" class="m-4 rounded-lg p-2" placeholder="Eg, Nagpur , Pune , Banglore" name="search" list="citys">
+             <datalist id="citys">
+              
+             </datalist>
+             <!-- <ul id="dropdown" class="absolute mt-2 mb-4 z-10 bg-red-700 border border-gray-300 rounded-lg hidden w-full max-h-60 overflow-y-auto"></ul> -->
+             <button type="submit" id="btn"  class=" bg-violet-600  hover:bg-violet-900  font-bold hover:scale-105  text-white text-xl w-1/2 text-center rounded-md ml-20 p-2 md:ml-44 lg:ml-40 ">Search</button>
+             
+          </form>
+          <p>--------------- OR ---------------</p>
+            <button id="currentlocation" class="bg-stone-400 hover:bg-stone-800 hover:text-white p-1 rounded-sm font-semibold mt-1 md:p-2">Use My Current Location</button>   
+        </article>
+
+
+        <!-- Map implementation -->
+
+        <div id="map" class=" h-44 rounded-lg border-solid border-2 border-black md:h-96 m-8"></div>
+
+   </article>
 
       
       
