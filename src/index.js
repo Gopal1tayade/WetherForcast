@@ -66,10 +66,10 @@ document.addEventListener("DOMContentLoaded", () => {
       storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
 
     console.log(`${storedCity}`);
-
+    const cityUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${storedCity}`;
     const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
     getData(url);
-  
+    getPosition(cityUrl);
   }
 
   //getting the wether through cityname
@@ -93,6 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
       function success(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+        localStorage.setItem("longituted", longitude);
+        localStorage.setItem("lattitud", latitude);
 
         const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
 
@@ -107,7 +109,6 @@ document.addEventListener("DOMContentLoaded", () => {
             sessionStorage.setItem("cityName", city); // storing the city name in the session storage
             alert(`Your current city is: ${city}`);
             window.location.reload();
-          
           })
           .catch(() =>
             alert("Failed to retrieve city name. Please try again.")
@@ -159,7 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
       fivedyasforcast.innerHTML = "";
       resultdata.forecast.forecastday.forEach((days) => {
         const forcastSection = document.createElement("section");
-        forcastSection.className ="bg-lime-400 hover:scale-100 text-center mt-10 ml-14 mr-14 mb-8 md:m-12 shadow-inner md:shadow-2xl shadow-lime-400/50 rounded-lg leading-8 p-2  md:p-10 md:leading-10 lg:m-4 lg:p-2 lg:leading-4";
+        forcastSection.className =
+          "bg-lime-400 hover:scale-100 text-center mt-10 ml-14 mr-14 mb-8 md:m-12 shadow-inner md:shadow-2xl shadow-lime-400/50 rounded-lg leading-8 p-2  md:p-10 md:leading-10 lg:m-4 lg:p-2 lg:leading-4";
         forcastSection.innerHTML = ` <p class="text-xl font-semibold md:text-2xl md:mt-2">Date(${days.date})</p>
                         <img src=${days.day.condition.icon} class="ml-20 mb-2 md:ml-12" width="80px" alt="wether image">
                         <p class="font-semibold md:text-lg">Temprature: ${days.day.avgtemp_c} <sup>0</sup>C</p>
@@ -191,62 +193,81 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(checkServerStatus, 30000);
   checkServerStatus();
 
-
-
-
   // Map implementation
 
-  var map = L.map('map').setView([20.5937, 78.9629], 4);
+  var map = L.map("map").setView([20.5937, 78.9629], 4);
 
-  const lattitud = localStorage.getItem('lattitud');
-  const longituted = localStorage.getItem('longituted');
+  const lattitud = localStorage.getItem("lattitud");
+  const longituted = localStorage.getItem("longituted");
 
   var marker = L.marker([lattitud, longituted]).addTo(map);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-   
-}).addTo(map);
+  }).addTo(map);
 
-var precipitationLayer = L.tileLayer(`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`);
-var temperatureLayer = L.tileLayer(`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`);
-var windLayer = L.tileLayer(`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`);
-
-precipitationLayer.addTo(map); // Add precipitation layer to the map
-
-var baseMaps = {
-  "Precipitation": precipitationLayer,
-  "Temperature": temperatureLayer,
-  "Wind": windLayer
-};
-
-L.control.layers(baseMaps).addTo(map);
-function onMapClick(e) {
-  console.log(e.latlng); 
-  var marker = L.marker([e.latlng.lat , e.latlng.lng]).addTo(map);
-  localStorage.setItem('lattitud',e.latlng.lat);
-  localStorage.setItem('longituted',e.latlng.lng);
-  const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`;
-
-  fetch(apiURL)
-  .then((response) => response.json())
-  .then((data) => {
-    const city =
-      data.address.city ||
-      data.address.town ||
-      data.address.village ||
-      "Unknown location";
-    sessionStorage.setItem("cityName", city); // storing the city name in the session storage
-    alert(`Your current city is: ${city}`);
-    window.location.reload();
-  
-  })
-  .catch(() =>
-    alert("Failed to retrieve city name. Please try again.")
+  var precipitationLayer = L.tileLayer(
+    `https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`
   );
-}
+  var temperatureLayer = L.tileLayer(
+    `https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`
+  );
+  var windLayer = L.tileLayer(
+    `https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=869dedcd8c6b441e89595705242108`
+  );
 
-map.on('click', onMapClick);
+  precipitationLayer.addTo(map); // Add precipitation layer to the map
+
+  var baseMaps = {
+    Precipitation: precipitationLayer,
+    Temperature: temperatureLayer,
+    Wind: windLayer,
+  };
+
+  L.control.layers(baseMaps).addTo(map);
+  function onMapClick(e) {
+    console.log(e.latlng);
+    var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+    localStorage.setItem("lattitud", e.latlng.lat);
+    localStorage.setItem("longituted", e.latlng.lng);
+    const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}`;
+
+    fetch(apiURL)
+      .then((response) => response.json())
+      .then((data) => {
+        const city =
+          data.address.city ||
+          data.address.town ||
+          data.address.village ||
+          "Unknown location";
+        sessionStorage.setItem("cityName", city); // storing the city name in the session storage
+        alert(`Your current city is: ${city}`);
+        window.location.reload();
+      })
+      .catch(() => alert("Failed to retrieve city name. Please try again."));
+  }
+
+  map.on("click", onMapClick);
 
 
+  async function getPosition(url) {
+    try{
+ const result = await fetch(url);
+ const coordinat = await result.json();
+ console.log(coordinat)
 
+ const latitude = coordinat[0].lat;
+ const longitude =coordinat[0].lon;
+ localStorage.setItem('longituted',longitude);
+ localStorage.setItem('lattitud',latitude)
+ window.location.reload();
+    }catch(err){
+      console.error("Error:", err);
+    }
+    
+      
+    
+
+        
+        } 
+  
 });
