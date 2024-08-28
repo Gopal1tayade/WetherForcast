@@ -45,14 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleClick(e) {
     e.preventDefault();
-    alert("Data will be loaded...........!");
 
     var city = document.getElementById("cityname").value;
     if (!city) {
       alert("enter the city Name.....!");
       return;
     }
-    sessionStorage.setItem("clickcityName", city);
+
+    alert("Data will be loaded...........!");
+
+    
+    localStorage.setItem("cityName", city);  //sessionStorage.setItem("clickcityName", city);
 
     if (!CityNames.includes(city)) {
       CityNames.push(city);
@@ -61,15 +64,22 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("CityName", JSON.stringify(CityNames));
     document.getElementById("cityform").reset();
 
-    var storedCity = sessionStorage.getItem("clickcityName");
+    var storedCity = localStorage.getItem("cityName");  //sessionStorage.getItem("clickcityName");
     storedCity =
       storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
 
     console.log(`${storedCity}`);
     const cityUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${storedCity}`;
     const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
-    getData(url);
-    getPosition(cityUrl);
+    
+    
+    async function executeFunctions() {
+      await getData(url);;
+      getPosition(cityUrl);
+  }
+  
+  executeFunctions();
+
   }
 
   //getting the wether through cityname
@@ -93,8 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
       function success(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        localStorage.setItem("longituted", longitude);
-        localStorage.setItem("lattitud", latitude);
+        
 
         const apiURL = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
 
@@ -106,8 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
               data.address.town ||
               data.address.village ||
               "Unknown location";
-            sessionStorage.setItem("cityName", city); // storing the city name in the session storage
+            localStorage.setItem("cityName", city); // storing the city name in the session storage   sessionStorage.setItem("cityName", city);
             alert(`Your current city is: ${city}`);
+            localStorage.setItem("longituted", longitude);
+            localStorage.setItem("lattitud", latitude);
             window.location.reload();
           })
           .catch(() =>
@@ -120,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  var storedCity = sessionStorage.getItem("cityName");
+  var storedCity = localStorage.getItem("cityName");  //sessionStorage.getItem("cityName");
   storedCity =
     storedCity === null || storedCity.trim() === "" ? "London" : storedCity;
   console.log(`${storedCity}`);
@@ -177,21 +188,21 @@ document.addEventListener("DOMContentLoaded", () => {
   getData(url);
 
   // after the session is complete , to remove the data from the localstorage
-  function checkServerStatus() {
-    fetch("http://127.0.0.1:5500/src/")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Server is off");
-        }
-      })
-      .catch((error) => {
-        console.error("Server is off: please resatrt the server", error);
+  // function checkServerStatus() {
+  //   fetch("http://127.0.0.1:5500/src/")
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Server is off");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Server is off: please resatrt the server", error);
 
-        localStorage.clear();
-      });
-  }
-  setInterval(checkServerStatus, 30000);
-  checkServerStatus();
+  //       localStorage.clear();
+  //     });
+  // }
+  // setInterval(checkServerStatus, 30000);
+  // checkServerStatus();
 
   // Map implementation
 
@@ -239,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
           data.address.town ||
           data.address.village ||
           "Unknown location";
-        sessionStorage.setItem("cityName", city); // storing the city name in the session storage
+        localStorage.setItem("cityName", city); // storing the city name in the session storage   sessionStorage.setItem("cityName", city);
         alert(`Your current city is: ${city}`);
         window.location.reload();
       })
@@ -259,15 +270,12 @@ document.addEventListener("DOMContentLoaded", () => {
  const longitude =coordinat[0].lon;
  localStorage.setItem('longituted',longitude);
  localStorage.setItem('lattitud',latitude)
- window.location.reload();
+window.location.reload();
     }catch(err){
       console.error("Error:", err);
-    }
-    
-      
-    
-
-        
+    } 
         } 
+
+   
   
 });
