@@ -70,7 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log(`${storedCity}`);
     const cityUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${storedCity}`;
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+    const url = window.location.protocol === 'https:' 
+    ? `https://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`
+    :  `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+    
+    // const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
     
     
     async function executeFunctions() {
@@ -137,7 +141,9 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(`${storedCity}`);
 
   // api data
-  const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+  const url = window.location.protocol === 'https:' 
+  ? `https://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`
+  :  `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
 
   async function getData(url) {
     try {
