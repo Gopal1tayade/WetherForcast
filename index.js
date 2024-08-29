@@ -37,7 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const listItem = document.createElement("option");
         listItem.value = city;
         dropdown.appendChild(listItem);
+        
       });
+      
     }
   });
 
@@ -119,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data.address.town ||
               data.address.village ||
               "Unknown location";
+          
             localStorage.setItem("cityName", city); // storing the city name in the session storage   sessionStorage.setItem("cityName", city);
             alert(`Your current city is: ${city}`);
             localStorage.setItem("longituted", longitude);
@@ -189,26 +192,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       console.error("Error fetching data: something enter wrong", error);
       alert("the name of the city is not correct.........!");
+      const city = localStorage.getItem('cityName')
+      localStorage.removeItem('cityName');
+      CityNames.pop(city);
+      localStorage.setItem("CityName", JSON.stringify(CityNames));
+      localStorage.setItem('cityName', 'london');
+      window.location.reload();
     }
   }
   getData(url);
 
-  // after the session is complete , to remove the data from the localstorage
-  // function checkServerStatus() {
-  //   fetch("http://127.0.0.1:5500/src/")
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Server is off");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Server is off: please resatrt the server", error);
-
-  //       localStorage.clear();
-  //     });
-  // }
-  // setInterval(checkServerStatus, 30000);
-  // checkServerStatus();
 
   // Map implementation
 
