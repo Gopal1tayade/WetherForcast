@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     filteredCities.forEach((city) => {
       const listItem = document.createElement("option");
       listItem.value = city;
+      listItem.textContent = city;
       dropdown.appendChild(listItem);
     });
   });
@@ -37,12 +38,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const listItem = document.createElement("option");
         listItem.value = city;
         dropdown.appendChild(listItem);
+        
       });
+      
     }
   });
 
   // create a global function to show the data through the city name
-
+ 
   function handleClick(e) {
     e.preventDefault();
 
@@ -70,7 +73,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log(`${storedCity}`);
     const cityUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${storedCity}`;
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+    const url = window.location.protocol === 'https:' 
+    ? `https://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`
+    :  `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+    
+    // const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
     
     
     async function executeFunctions() {
@@ -115,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data.address.town ||
               data.address.village ||
               "Unknown location";
+          
             localStorage.setItem("cityName", city); // storing the city name in the session storage   sessionStorage.setItem("cityName", city);
             alert(`Your current city is: ${city}`);
             localStorage.setItem("longituted", longitude);
@@ -137,7 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(`${storedCity}`);
 
   // api data
-  const url = `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
+  const url = window.location.protocol === 'https:' 
+  ? `https://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`
+  :  `http://api.weatherapi.com/v1/forecast.json?key=869dedcd8c6b441e89595705242108&q=${storedCity}&days=5`;
 
   async function getData(url) {
     try {
@@ -182,34 +192,30 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } catch (error) {
       console.error("Error fetching data: something enter wrong", error);
-      alert("the name of the city is not correct.........!");
+      alert("the name of the city is  incorrect.........the default city data will be loaded...!");
+      const city = localStorage.getItem('cityName')
+      localStorage.removeItem('cityName');
+      CityNames.pop(city);
+      localStorage.setItem("CityName", JSON.stringify(CityNames));
+
+      localStorage.setItem("longituted", -0.118092);
+      localStorage.setItem("lattitud", 51.509865);
+  
+      window.location.reload();
     }
   }
   getData(url);
 
-  // after the session is complete , to remove the data from the localstorage
-  // function checkServerStatus() {
-  //   fetch("http://127.0.0.1:5500/src/")
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Server is off");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Server is off: please resatrt the server", error);
-
-  //       localStorage.clear();
-  //     });
-  // }
-  // setInterval(checkServerStatus, 30000);
-  // checkServerStatus();
 
   // Map implementation
 
   var map = L.map("map").setView([20.5937, 78.9629], 4);
 
-  const lattitud = localStorage.getItem("lattitud");
-  const longituted = localStorage.getItem("longituted");
+  let lattitud = localStorage.getItem("lattitud");
+  let longituted = localStorage.getItem("longituted");
+   
+  lattitud = lattitud == null ? " 51.509865" : lattitud;
+  longituted = longituted == null ? "-0.118092" : longituted;
 
   var marker = L.marker([lattitud, longituted]).addTo(map);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {

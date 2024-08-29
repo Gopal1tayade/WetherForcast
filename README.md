@@ -11,3 +11,8 @@
 
 
 # git url for this application -----> " https://github.com/Gopal1tayade/WetherForcast "
+
+
+# to see the live hosting of my application past the below link in browser
+
+https://gopal1tayade.github.io/WetherForcast/
