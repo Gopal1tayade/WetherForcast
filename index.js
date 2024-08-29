@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     filteredCities.forEach((city) => {
       const listItem = document.createElement("option");
       listItem.value = city;
+      listItem.textContent = city;
       dropdown.appendChild(listItem);
     });
   });
@@ -44,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // create a global function to show the data through the city name
-
+ 
   function handleClick(e) {
     e.preventDefault();
 
@@ -191,12 +192,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } catch (error) {
       console.error("Error fetching data: something enter wrong", error);
-      alert("the name of the city is not correct.........!");
+      alert("the name of the city is  incorrect.........the default city data will be loaded...!");
       const city = localStorage.getItem('cityName')
       localStorage.removeItem('cityName');
       CityNames.pop(city);
       localStorage.setItem("CityName", JSON.stringify(CityNames));
-      localStorage.setItem('cityName', 'london');
+
+      localStorage.setItem("longituted", -0.118092);
+      localStorage.setItem("lattitud", 51.509865);
+  
       window.location.reload();
     }
   }
@@ -207,8 +211,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   var map = L.map("map").setView([20.5937, 78.9629], 4);
 
-  const lattitud = localStorage.getItem("lattitud");
-  const longituted = localStorage.getItem("longituted");
+  let lattitud = localStorage.getItem("lattitud");
+  let longituted = localStorage.getItem("longituted");
+   
+  lattitud = lattitud == null ? " 51.509865" : lattitud;
+  longituted = longituted == null ? "-0.118092" : longituted;
 
   var marker = L.marker([lattitud, longituted]).addTo(map);
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
